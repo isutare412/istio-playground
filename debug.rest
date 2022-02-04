@@ -1,0 +1,10 @@
+@scheme=http
+@url=localhost:8080
+@apiPrefix=api/v1
+
+
+################################################################################
+# Say hello
+################################################################################
+GET {{scheme}}://{{url}}/{{apiPrefix}}/hello/Suhyuk HTTP/1.1
+Content-Type: application/json
