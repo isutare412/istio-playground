@@ -1,0 +1,9 @@
+mode: "development" # development/production
+
+http:
+  host: "localhost"
+  port: "8080"
+
+userServer:
+  addr: "localhost:8081"
+  timeout: 3000 # ms
