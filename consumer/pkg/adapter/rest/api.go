@@ -11,12 +11,12 @@ import (
 	"github.com/isutare412/istio-playground/consumer/pkg/core/user"
 )
 
-type api struct {
+type apiRest struct {
 	addr   string
 	client *http.Client
 }
 
-func (a *api) GetUser(ctx context.Context, name string) (*user.User, error) {
+func (a *apiRest) GetUser(ctx context.Context, name string) (*user.User, error) {
 	req, err := http.NewRequest("GET", fmt.Sprintf("http://%s/api/v1/hello/%s", a.addr, name), nil)
 	if err != nil {
 		return nil, fmt.Errorf("api.GetUser: %w", err)
@@ -35,8 +35,8 @@ func (a *api) GetUser(ctx context.Context, name string) (*user.User, error) {
 	return &user, nil
 }
 
-func NewApi(cfg *config.ApiServerConfig) *api {
-	return &api{
+func NewApiRest(cfg *config.ApiServerConfig) *apiRest {
+	return &apiRest{
 		addr: cfg.Addr,
 		client: &http.Client{
 			Timeout: time.Millisecond * time.Duration(cfg.Timeout),

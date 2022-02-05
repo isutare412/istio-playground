@@ -37,7 +37,7 @@ func main() {
 
 	rootCtx, cancel := context.WithCancel(context.Background())
 
-	apiRest := rest.NewApi(&cfg.ApiServer)
+	apiRest := rest.NewApiRest(&cfg.ApiServer)
 	log.Info("created api rest template")
 
 	uSvc := user.NewService(apiRest)
