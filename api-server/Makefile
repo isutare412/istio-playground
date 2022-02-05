@@ -3,7 +3,6 @@
 ROOTDIR := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 
 API_SERVER_CONFIG ?= ${ROOTDIR}/configs/default.yaml
-SERVER_BIN_NAME ?= imageer_api_server
 
 ##@ General
 
