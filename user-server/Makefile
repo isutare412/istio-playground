@@ -3,7 +3,7 @@
 ROOTDIR := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 
 USER_SERVER_CONFIG ?= ${ROOTDIR}/configs/default.yaml
-TAG ?= v0.1.0
+TAG ?= v0.1.1
 
 ##@ General
 
