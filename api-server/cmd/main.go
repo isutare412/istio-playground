@@ -7,6 +7,7 @@ import (
 	"syscall"
 
 	"github.com/isutare412/istio-playground/api-server/pkg/adapter/http"
+	"github.com/isutare412/istio-playground/api-server/pkg/adapter/rest"
 	"github.com/isutare412/istio-playground/api-server/pkg/config"
 	"github.com/isutare412/istio-playground/api-server/pkg/core/user"
 	log "github.com/sirupsen/logrus"
@@ -36,7 +37,10 @@ func main() {
 
 	rootCtx, cancel := context.WithCancel(context.Background())
 
-	uSvc, err := user.NewService(&cfg.UserServer)
+	userRest := rest.NewUserRest(&cfg.UserServer)
+	log.Info("created user rest template")
+
+	uSvc, err := user.NewService(userRest)
 	if err != nil {
 		log.Fatalf("failed to create user service: %v", err)
 	}
