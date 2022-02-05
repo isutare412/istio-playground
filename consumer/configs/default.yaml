@@ -1,0 +1,8 @@
+mode: "development" # development/production
+
+ticker:
+  interval: 3000 # ms
+
+apiServer:
+  addr: "localhost:8080"
+  timeout: 3000 # ms
