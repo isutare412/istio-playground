@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "isp-user.fullname" . }}
+  labels:
+    {{- include "isp-user.labels" . | nindent 4 }}
+data:
+  release.yaml: |
+    mode: {{ .Values.config.mode | quote }}
+    http:
+      host: {{ .Values.config.http.host | quote }}
+      port: {{ .Values.config.http.port | quote }}
