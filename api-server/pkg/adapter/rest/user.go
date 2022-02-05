@@ -16,6 +16,28 @@ type userRest struct {
 	client *http.Client
 }
 
+func (ur *userRest) Name() string {
+	return "userRest"
+}
+
+func (ur *userRest) IsHealthy() error {
+	req, err := http.NewRequest("GET", fmt.Sprintf("http://%s/readiness", ur.addr), nil)
+	if err != nil {
+		return fmt.Errorf("userRest.IsHealthy: %w", err)
+	}
+
+	resp, err := ur.client.Do(req)
+	if err != nil {
+		return fmt.Errorf("userRest.IsHealthy: %w", err)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode < http.StatusOK || resp.StatusCode >= http.StatusBadRequest {
+		return fmt.Errorf("response[%d] is not ready", resp.StatusCode)
+	}
+	return nil
+}
+
 func (ur *userRest) GetUser(ctx context.Context, name string) (*user.User, error) {
 	req, err := http.NewRequest("GET", fmt.Sprintf("http://%s/api/v1/users/%s", ur.addr, name), nil)
 	if err != nil {

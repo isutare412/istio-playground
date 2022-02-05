@@ -8,6 +8,7 @@ import (
 
 	"github.com/isutare412/istio-playground/user-server/pkg/adapter/http"
 	"github.com/isutare412/istio-playground/user-server/pkg/config"
+	"github.com/isutare412/istio-playground/user-server/pkg/core/health"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 )
@@ -35,7 +36,10 @@ func main() {
 
 	rootCtx, cancel := context.WithCancel(context.Background())
 
-	server := http.NewServer(&cfg.Http)
+	hSvc := health.NewService()
+	log.Info("created health service")
+
+	server := http.NewServer(&cfg.Http, hSvc)
 	log.Info("created http server")
 
 	srvErrors := server.Start(rootCtx)

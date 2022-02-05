@@ -9,6 +9,7 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/isutare412/istio-playground/api-server/pkg/config"
+	"github.com/isutare412/istio-playground/api-server/pkg/core/health"
 	"github.com/isutare412/istio-playground/api-server/pkg/core/user"
 	log "github.com/sirupsen/logrus"
 )
@@ -54,7 +55,7 @@ func (s *server) shutdown() {
 	log.Info("HTTP server shutdown finished successfully")
 }
 
-func NewServer(cfg *config.HttpConfig, uSvc user.Service) *server {
+func NewServer(cfg *config.HttpConfig, hSvc health.Service, uSvc user.Service) *server {
 	accessLog := structAccessLog
 	if config.IsDevelopmentMode() {
 		accessLog = plainAccessLog
@@ -62,6 +63,9 @@ func NewServer(cfg *config.HttpConfig, uSvc user.Service) *server {
 
 	r := mux.NewRouter()
 	r.Use(accessLog)
+
+	r.HandleFunc("/liveness", liveness(hSvc)).Methods("GET")
+	r.HandleFunc("/readiness", readiness(hSvc)).Methods("GET")
 
 	api := r.PathPrefix("/api/v1").Subrouter()
 	api.HandleFunc("/hello/{name}", sayHello(uSvc))

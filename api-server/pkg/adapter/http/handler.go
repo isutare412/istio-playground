@@ -4,9 +4,32 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
+	"github.com/isutare412/istio-playground/api-server/pkg/core/health"
 	"github.com/isutare412/istio-playground/api-server/pkg/core/user"
 	log "github.com/sirupsen/logrus"
 )
+
+func liveness(hSvc health.Service) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		if err := hSvc.Liveness(); err != nil {
+			log.Errorf("liveness failed: %v", err)
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+		w.WriteHeader(http.StatusOK)
+	}
+}
+
+func readiness(hSvc health.Service) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		if err := hSvc.Readiness(); err != nil {
+			log.Errorf("readiness failed: %v", err)
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+		w.WriteHeader(http.StatusOK)
+	}
+}
 
 func sayHello(uSvc user.Service) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {

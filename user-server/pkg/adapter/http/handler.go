@@ -6,8 +6,31 @@ import (
 
 	lorem "github.com/drhodes/golorem"
 	"github.com/gorilla/mux"
+	"github.com/isutare412/istio-playground/user-server/pkg/core/health"
 	log "github.com/sirupsen/logrus"
 )
+
+func liveness(hSvc health.Service) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		if err := hSvc.Liveness(); err != nil {
+			log.Errorf("liveness failed: %v", err)
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+		w.WriteHeader(http.StatusOK)
+	}
+}
+
+func readiness(hSvc health.Service) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		if err := hSvc.Readiness(); err != nil {
+			log.Errorf("readiness failed: %v", err)
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+		w.WriteHeader(http.StatusOK)
+	}
+}
 
 func getUser(w http.ResponseWriter, r *http.Request) {
 	name, ok := mux.Vars(r)["name"]
