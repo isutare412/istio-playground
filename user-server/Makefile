@@ -3,6 +3,7 @@
 ROOTDIR := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 
 USER_SERVER_CONFIG ?= ${ROOTDIR}/configs/default.yaml
+TAG ?= v0.1.0
 
 ##@ General
 
@@ -15,3 +16,16 @@ help: ## Display this help.
 .PHONY: run-dev
 run-dev: ## Run api server in development environment
 	USER_SERVER_CONFIG=${USER_SERVER_CONFIG} go run ${ROOTDIR}/cmd/main.go
+
+##@ Deployment
+
+.PHONY: image
+image: ## Build docker image
+	docker build \
+		-f ${ROOTDIR}/deployments/Dockerfile \
+		-t redshoore/istio-user-server:${TAG} \
+		.
+
+.PHONY: push
+push: ## Push docker image to docker hub
+	docker push redshoore/istio-user-server:${TAG}
