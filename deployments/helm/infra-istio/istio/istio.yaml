@@ -11,6 +11,8 @@ spec:
     enableTracing: true
     defaultConfig:
       tracing:
+        zipkin:
+          address: jaeger-collector.istio-system:9411
         sampling: 100.0
   components:
     ingressGateways:
