@@ -13,3 +13,7 @@ data:
     userServer:
       addr: {{ .Values.config.userServer.addr | quote }}
     timeout: {{ .Values.config.timeout }}
+    tracer:
+      enabled: {{ .Values.config.tracer.enabled }}
+      serviceName: {{ .Values.config.tracer.serviceName | quote }}
+      endpoint: {{ .Values.config.tracer.endpoint | quote }}

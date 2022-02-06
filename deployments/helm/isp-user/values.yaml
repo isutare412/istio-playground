@@ -8,7 +8,7 @@ image:
   repository: redshoore/istio-user-server
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
-  tag: v0.1.1
+  tag: v0.1.2
 
 imagePullSecrets: []
 nameOverride: ""
@@ -79,3 +79,7 @@ config:
   http:
     host: 0.0.0.0
     port: 8080
+  tracer:
+    enabled: true
+    serviceName: user-server
+    endpoint: http://jaeger-collector.istio-system:14268/api/traces

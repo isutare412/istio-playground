@@ -10,3 +10,7 @@ data:
     http:
       host: {{ .Values.config.http.host | quote }}
       port: {{ .Values.config.http.port | quote }}
+    tracer:
+      enabled: {{ .Values.config.tracer.enabled }}
+      serviceName: {{ .Values.config.tracer.serviceName | quote }}
+      endpoint: {{ .Values.config.tracer.endpoint | quote }}

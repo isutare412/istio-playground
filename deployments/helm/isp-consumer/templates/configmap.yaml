@@ -12,3 +12,7 @@ data:
     apiServer:
       addr: {{ .Values.config.apiServer.addr | quote }}
       timeout: {{ .Values.config.apiServer.timeout }}
+    tracer:
+      enabled: {{ .Values.config.tracer.enabled }}
+      serviceName: {{ .Values.config.tracer.serviceName | quote }}
+      endpoint: {{ .Values.config.tracer.endpoint | quote }}
