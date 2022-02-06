@@ -6,7 +6,7 @@ tag: 1.12.2
 imagePullSecrets: []
 
 # Used to replace istioNamespace to support operator watch multiple namespaces.
-watchedNamespaces: istio-system
+watchedNamespaces: istio-system,istio-ingress
 waitForResourcesTimeout: 300s
 
 # Used for helm2 to add the CRDs to templates.
