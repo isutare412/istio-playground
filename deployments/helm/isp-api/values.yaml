@@ -78,15 +78,18 @@ tolerations: []
 
 affinity: {}
 
-config:
-  mode: development # development/production
-  http:
-    host: 0.0.0.0
-    port: 8080
-  userServer:
-    addr: isp-user:80
-  timeout: 3000 # ms
-  tracer:
-    enabled: true
-    serviceName: api-server
-    endpoint: http://jaeger-collector.istio-system:14268/api/traces
+app:
+  name: isp-api-server
+  version: v1
+  config:
+    mode: "development" # development/production
+    http:
+      host: "0.0.0.0"
+      port: "8080"
+    userServer:
+      addr: "isp-user:80"
+    timeout: 3000 # ms
+    tracer:
+      enabled: true
+      serviceName: "api-server"
+      endpoint: "http://jaeger-collector.istio-system:14268/api/traces"

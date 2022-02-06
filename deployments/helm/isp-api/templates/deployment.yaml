@@ -19,6 +19,8 @@ spec:
       {{- end }}
       labels:
         {{- include "isp-api.selectorLabels" . | nindent 8 }}
+        app: {{ .Values.app.name }}
+        version: {{ .Values.app.version }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -38,7 +40,7 @@ spec:
               value: /etc/release.yaml
           ports:
             - name: http
-              containerPort: {{ .Values.config.http.port }}
+              containerPort: {{ .Values.app.config.http.port }}
               protocol: TCP
           livenessProbe:
             httpGet:

@@ -6,13 +6,4 @@ metadata:
     {{- include "isp-consumer.labels" . | nindent 4 }}
 data:
   release.yaml: |
-    mode: {{ .Values.config.mode | quote }}
-    ticker:
-      interval: {{ .Values.config.ticker.interval }}
-    apiServer:
-      addr: {{ .Values.config.apiServer.addr | quote }}
-      timeout: {{ .Values.config.apiServer.timeout }}
-    tracer:
-      enabled: {{ .Values.config.tracer.enabled }}
-      serviceName: {{ .Values.config.tracer.serviceName | quote }}
-      endpoint: {{ .Values.config.tracer.endpoint | quote }}
+    {{- toYaml .Values.app.config | nindent 4 }}

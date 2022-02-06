@@ -6,14 +6,4 @@ metadata:
     {{- include "isp-api.labels" . | nindent 4 }}
 data:
   release.yaml: |
-    mode: {{ .Values.config.mode | quote }}
-    http:
-      host: {{ .Values.config.http.host | quote }}
-      port: {{ .Values.config.http.port | quote }}
-    userServer:
-      addr: {{ .Values.config.userServer.addr | quote }}
-    timeout: {{ .Values.config.timeout }}
-    tracer:
-      enabled: {{ .Values.config.tracer.enabled }}
-      serviceName: {{ .Values.config.tracer.serviceName | quote }}
-      endpoint: {{ .Values.config.tracer.endpoint | quote }}
+    {{- toYaml .Values.app.config | nindent 4 }}

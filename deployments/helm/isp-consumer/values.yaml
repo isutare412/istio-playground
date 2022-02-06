@@ -36,10 +36,6 @@ securityContext: {}
   # runAsNonRoot: true
   # runAsUser: 1000
 
-service:
-  type: ClusterIP
-  port: 80
-
 ingress:
   enabled: false
   annotations: {}
@@ -78,14 +74,17 @@ tolerations: []
 
 affinity: {}
 
-config:
-  mode: development # development/production
-  ticker:
-    interval: 3000 # ms
-  apiServer:
-    addr: isp-api:80
-    timeout: 3000 # ms
-  tracer:
-    enabled: true
-    serviceName: consumer
-    endpoint: http://jaeger-collector.istio-system:14268/api/traces
+app:
+  name: isp-consumer
+  version: v1
+  config:
+    mode: "development" # development/production
+    ticker:
+      interval: 3000 # ms
+    apiServer:
+      addr: "isp-api:80"
+      timeout: 3000 # ms
+    tracer:
+      enabled: true
+      serviceName: "consumer"
+      endpoint: "http://jaeger-collector.istio-system:14268/api/traces"

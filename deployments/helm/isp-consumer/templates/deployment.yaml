@@ -19,6 +19,8 @@ spec:
       {{- end }}
       labels:
         {{- include "isp-consumer.selectorLabels" . | nindent 8 }}
+        app: {{ .Values.app.name }}
+        version: {{ .Values.app.version }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -36,10 +38,6 @@ spec:
           env:
             - name: CONSUMER_CONFIG
               value: /etc/release.yaml
-          ports:
-            - name: http
-              containerPort: 80
-              protocol: TCP
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
