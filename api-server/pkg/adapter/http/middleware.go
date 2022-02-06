@@ -5,7 +5,6 @@ import (
 	"net/http"
 
 	"github.com/opentracing/opentracing-go"
-	"github.com/opentracing/opentracing-go/ext"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -76,9 +75,9 @@ func tracing(h http.Handler) http.Handler {
 				return
 			}
 		} else {
-			span = opentracing.GlobalTracer().StartSpan(
+			span = opentracing.StartSpan(
 				"http.middleware.tracing",
-				ext.RPCServerOption(wireCtx),
+				opentracing.ChildOf(wireCtx),
 			)
 		}
 		defer span.Finish()
