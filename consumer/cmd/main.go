@@ -8,8 +8,10 @@ import (
 
 	"github.com/isutare412/istio-playground/consumer/pkg/adapter/rest"
 	"github.com/isutare412/istio-playground/consumer/pkg/adapter/ticker"
+	"github.com/isutare412/istio-playground/consumer/pkg/adapter/tracer"
 	"github.com/isutare412/istio-playground/consumer/pkg/config"
 	"github.com/isutare412/istio-playground/consumer/pkg/core/user"
+	"github.com/opentracing/opentracing-go"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 )
@@ -36,6 +38,14 @@ func main() {
 	}
 
 	rootCtx, cancel := context.WithCancel(context.Background())
+
+	tracer, tracerCloser, err := tracer.NewTracer(&cfg.Tracer)
+	if err != nil {
+		log.Fatalf("failed to create tracer: %v", err)
+	}
+	defer tracerCloser.Close()
+	opentracing.SetGlobalTracer(tracer)
+	log.Info("registered global tracer")
 
 	apiRest := rest.NewApiRest(&cfg.ApiServer)
 	log.Info("created api rest template")

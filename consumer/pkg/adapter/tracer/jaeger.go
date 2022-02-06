@@ -3,7 +3,7 @@ package tracer
 import (
 	"io"
 
-	"github.com/isutare412/istio-playground/user-server/pkg/config"
+	"github.com/isutare412/istio-playground/consumer/pkg/config"
 	"github.com/opentracing/opentracing-go"
 	"github.com/uber/jaeger-client-go"
 	jConfig "github.com/uber/jaeger-client-go/config"
