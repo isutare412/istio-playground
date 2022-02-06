@@ -18,7 +18,7 @@ spec:
         namespace: istio-ingress
         enabled: true
         label:
-          istio: istio-ingressgateway
+          istio: ingressgateway
         k8s:
           service:
             type: NodePort
