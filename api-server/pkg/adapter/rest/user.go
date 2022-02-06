@@ -9,6 +9,7 @@ import (
 
 	"github.com/isutare412/istio-playground/api-server/pkg/config"
 	"github.com/isutare412/istio-playground/api-server/pkg/core/user"
+	"github.com/opentracing/opentracing-go"
 )
 
 type userRest struct {
@@ -39,7 +40,19 @@ func (ur *userRest) IsHealthy() error {
 }
 
 func (ur *userRest) GetUser(ctx context.Context, name string) (*user.User, error) {
+	span, _ := opentracing.StartSpanFromContext(ctx, "userRest.GetUser")
+	defer span.Finish()
+
 	req, err := http.NewRequest("GET", fmt.Sprintf("http://%s/api/v1/users/%s", ur.addr, name), nil)
+	if err != nil {
+		return nil, fmt.Errorf("userRest.GetUser: %w", err)
+	}
+
+	err = span.Tracer().Inject(
+		span.Context(),
+		opentracing.HTTPHeaders,
+		opentracing.HTTPHeadersCarrier(req.Header),
+	)
 	if err != nil {
 		return nil, fmt.Errorf("userRest.GetUser: %w", err)
 	}

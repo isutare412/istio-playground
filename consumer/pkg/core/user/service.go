@@ -3,6 +3,8 @@ package user
 import (
 	"context"
 	"fmt"
+
+	"github.com/opentracing/opentracing-go"
 )
 
 type Service interface {
@@ -14,6 +16,9 @@ type service struct {
 }
 
 func (s *service) GetUser(ctx context.Context, name string) (*User, error) {
+	span, ctx := opentracing.StartSpanFromContext(ctx, "service.GetUser")
+	defer span.Finish()
+
 	usr, err := s.rest.GetUser(ctx, name)
 	if err != nil {
 		return nil, fmt.Errorf("service.GetUser: %w", err)

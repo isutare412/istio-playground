@@ -3,3 +3,8 @@ mode: development # development/production
 http:
   host: "0.0.0.0"
   port: "8081"
+
+tracer:
+  enabled: false
+  serviceName: "user-server"
+  endpoint: "http://jaeger-collector.istio-system:14268/api/traces"

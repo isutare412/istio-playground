@@ -1,8 +1,11 @@
 package http
 
 import (
+	"errors"
 	"net/http"
 
+	"github.com/opentracing/opentracing-go"
+	"github.com/opentracing/opentracing-go/ext"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -44,5 +47,44 @@ func plainAccessLog(h http.Handler) http.Handler {
 
 		log.Infof("%s - \"%s %s\" %d %d",
 			r.RemoteAddr, r.Method, r.URL.String(), logger.status, logger.length)
+	})
+}
+
+func tracing(h http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		var span opentracing.Span
+		wireCtx, err := opentracing.GlobalTracer().Extract(
+			opentracing.HTTPHeaders,
+			opentracing.HTTPHeadersCarrier(r.Header),
+		)
+		if err != nil {
+			if !errors.Is(err, opentracing.ErrSpanContextNotFound) {
+				log.Errorf("invalid span detected: %v", err)
+				responseError(w, http.StatusInternalServerError, "invalid span detected")
+				return
+			}
+
+			span = opentracing.GlobalTracer().StartSpan("http.middleware.tracing")
+			err = span.Tracer().Inject(
+				span.Context(),
+				opentracing.HTTPHeaders,
+				opentracing.HTTPHeadersCarrier(r.Header),
+			)
+			if err != nil {
+				log.Errorf("failed to inject new span: %v", err)
+				responseError(w, http.StatusInternalServerError, "failed to inject new span")
+				return
+			}
+		} else {
+			span = opentracing.GlobalTracer().StartSpan(
+				"http.middleware.tracing",
+				ext.RPCServerOption(wireCtx),
+			)
+		}
+		defer span.Finish()
+
+		ctx := opentracing.ContextWithSpan(r.Context(), span)
+		r = r.WithContext(ctx)
+		h.ServeHTTP(w, r)
 	})
 }

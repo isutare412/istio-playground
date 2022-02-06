@@ -62,7 +62,7 @@ func NewServer(cfg *config.HttpConfig, hSvc health.Service, uSvc user.Service) *
 	}
 
 	r := mux.NewRouter()
-	r.Use(accessLog)
+	r.Use(accessLog, tracing)
 
 	r.HandleFunc("/liveness", liveness(hSvc)).Methods("GET")
 	r.HandleFunc("/readiness", readiness(hSvc)).Methods("GET")

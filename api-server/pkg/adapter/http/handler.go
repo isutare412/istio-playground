@@ -6,6 +6,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/isutare412/istio-playground/api-server/pkg/core/health"
 	"github.com/isutare412/istio-playground/api-server/pkg/core/user"
+	"github.com/opentracing/opentracing-go"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -33,7 +34,8 @@ func readiness(hSvc health.Service) http.HandlerFunc {
 
 func sayHello(uSvc user.Service) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		ctx := r.Context()
+		span, ctx := opentracing.StartSpanFromContext(r.Context(), "http.handler.sayHello")
+		defer span.Finish()
 
 		name, ok := mux.Vars(r)["name"]
 		if !ok {

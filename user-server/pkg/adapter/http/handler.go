@@ -7,6 +7,7 @@ import (
 	lorem "github.com/drhodes/golorem"
 	"github.com/gorilla/mux"
 	"github.com/isutare412/istio-playground/user-server/pkg/core/health"
+	"github.com/opentracing/opentracing-go"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -33,6 +34,9 @@ func readiness(hSvc health.Service) http.HandlerFunc {
 }
 
 func getUser(w http.ResponseWriter, r *http.Request) {
+	span, _ := opentracing.StartSpanFromContext(r.Context(), "http.handler.getUser")
+	defer span.Finish()
+
 	name, ok := mux.Vars(r)["name"]
 	if !ok {
 		log.Warnf("name field not given")

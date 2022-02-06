@@ -7,8 +7,10 @@ import (
 	"syscall"
 
 	"github.com/isutare412/istio-playground/user-server/pkg/adapter/http"
+	"github.com/isutare412/istio-playground/user-server/pkg/adapter/tracer"
 	"github.com/isutare412/istio-playground/user-server/pkg/config"
 	"github.com/isutare412/istio-playground/user-server/pkg/core/health"
+	"github.com/opentracing/opentracing-go"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 )
@@ -35,6 +37,14 @@ func main() {
 	}
 
 	rootCtx, cancel := context.WithCancel(context.Background())
+
+	tracer, tracerCloser, err := tracer.NewTracer(&cfg.Tracer)
+	if err != nil {
+		log.Fatalf("failed to create tracer: %v", err)
+	}
+	defer tracerCloser.Close()
+	opentracing.SetGlobalTracer(tracer)
+	log.Info("registered global tracer")
 
 	hSvc := health.NewService()
 	log.Info("created health service")

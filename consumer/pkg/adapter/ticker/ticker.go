@@ -6,6 +6,7 @@ import (
 
 	"github.com/isutare412/istio-playground/consumer/pkg/config"
 	"github.com/isutare412/istio-playground/consumer/pkg/core/user"
+	"github.com/opentracing/opentracing-go"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -40,6 +41,10 @@ func (t *ticker) Done() <-chan struct{} {
 }
 
 func (t *ticker) handleUser(ctx context.Context, name string) {
+	span := opentracing.GlobalTracer().StartSpan("ticker.handleUser")
+	ctx = opentracing.ContextWithSpan(ctx, span)
+	defer span.Finish()
+
 	usr, err := t.uSvc.GetUser(ctx, name)
 	if err != nil {
 		log.Errorf("failed to get user: %v", err)

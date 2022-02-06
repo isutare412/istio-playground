@@ -5,5 +5,10 @@ http:
   port: "8080"
 
 userServer:
-  addr: "localhost:8081"
+  addr: "localhost:32213"
   timeout: 3000 # ms
+
+tracer:
+  enabled: true
+  serviceName: "api-server"
+  endpoint: "http://jaeger-collector.istio-system:14268/api/traces"

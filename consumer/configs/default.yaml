@@ -6,3 +6,8 @@ ticker:
 apiServer:
   addr: "localhost:8080"
   timeout: 3000 # ms
+
+tracer:
+  enabled: false
+  serviceName: "consumer"
+  endpoint: "http://jaeger-collector.istio-system:14268/api/traces"
