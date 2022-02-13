@@ -25,6 +25,6 @@ spec:
   http:
     - route:
         - destination:
-            host: isp-api
+            host: isp-api.dev.svc.cluster.local
             port:
               number: 80
