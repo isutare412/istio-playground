@@ -6,7 +6,7 @@ http:
 
 userServer:
   addr: "localhost:32213"
-  timeout: 3000 # ms
+  timeout: 0 # ms
 
 tracer:
   enabled: true

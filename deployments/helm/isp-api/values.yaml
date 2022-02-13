@@ -88,7 +88,7 @@ app:
       port: "8080"
     userServer:
       addr: "isp-user:80"
-    timeout: 3000 # ms
+    timeout: 0 # ms
     tracer:
       enabled: true
       serviceName: "api-server"

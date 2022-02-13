@@ -5,7 +5,7 @@ ticker:
 
 apiServer:
   addr: "localhost:8080"
-  timeout: 3000 # ms
+  timeout: 0 # ms
 
 tracer:
   enabled: false

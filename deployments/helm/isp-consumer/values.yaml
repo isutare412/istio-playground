@@ -83,7 +83,7 @@ app:
       interval: 3000 # ms
     apiServer:
       addr: "isp-api:80"
-      timeout: 3000 # ms
+      timeout: 0 # ms
     tracer:
       enabled: true
       serviceName: "consumer"
